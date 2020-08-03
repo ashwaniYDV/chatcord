@@ -63,6 +63,13 @@ io.on('connection', socket => {
     io.to(user.room).emit('message', formatMessage(user.username, msg));
   });
 
+  // Listen for share location
+  socket.on('shareLocation',(coords)=>{
+    const user = getCurrentUser(socket.id);
+
+    io.to(user.room).emit('locationMessage', formatMessage(user.username, `https://google.com/maps?q=${coords.latitude},${coords.longitude}`));
+  })
+
   // Runs when client disconnects
   socket.on('disconnect', () => {
     const user = userLeave(socket.id);

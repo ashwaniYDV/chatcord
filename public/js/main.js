@@ -3,6 +3,7 @@ const chatMessages = document.querySelector('.chat-messages');
 const roomName = document.getElementById('room-name');
 const userList = document.getElementById('users');
 const inputMsg = document.querySelector('#msg');
+const sendLocation = document.querySelector('.send-location');
 inputMsg.focus();
 
 
@@ -25,6 +26,15 @@ socket.on('roomUsers', ({ room, users }) => {
 socket.on('message', message => {
   // console.log(message);
   outputMessage(message);
+
+  // Scroll down
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+
+// Location message from server
+socket.on('locationMessage', message => {
+  console.log(message);
+  outputLocationMessage(message);
 
   // Scroll down
   chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -58,6 +68,18 @@ function outputMessage(message) {
   document.querySelector('.chat-messages').appendChild(div);
 }
 
+// Output location message to DOM
+function outputLocationMessage(message) {
+  const div = document.createElement('div');
+  div.classList.add('message');
+  div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
+  <p class="text">
+    <iframe src="${message.text}&output=embed" width="100%" height="240px"></iframe>
+    <a href="${message.text}" target="_bl">Open map in new tab</a>
+  </p>`;
+  document.querySelector('.chat-messages').appendChild(div);
+}
+
 // Add room name to DOM
 function outputRoomName(room) {
   roomName.innerText = room;
@@ -69,3 +91,16 @@ function outputUsers(users) {
     ${users.map(user => `<li>${user.username}</li>`).join('')}
   `;
 }
+
+sendLocation.addEventListener('click',()=>{
+  if(!navigator.geolocation){
+      return alert('Geolocation api not supported')
+  }
+  // $sendlocation.setAttribute('disabled','disabled')
+  navigator.geolocation.getCurrentPosition((position)=>{
+    console.log(position);
+    socket.emit('shareLocation', { latitude : position.coords.latitude, longitude : position.coords.longitude }, ( message ) => {
+        console.log(message)
+      })
+    })
+})

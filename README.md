@@ -12,7 +12,8 @@ npm run dev
 
 ## Features
 - [x] Chatcord bots to greet the new users and update the room users about joining and leaving of users
-- [x] Emoji picker
+- [x] Emoji support with emoji custom picker
+- [x] Share your live location
 - [x] Create a new room
 - [x] Join an existing room on the server
 - [ ] Send Files
@@ -20,5 +21,6 @@ npm run dev
 ## Screenshots
 ![login screen](./screenshots/4.png)
 ![chat emoji picker screen](./screenshots/1.png)
+![screen](./screenshots/5.png)
 ![chat screen](./screenshots/2.png)
 ![screen](./screenshots/3.png)
